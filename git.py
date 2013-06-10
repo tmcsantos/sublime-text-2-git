@@ -115,17 +115,20 @@ class CommandThread(threading.Thread):
                 if self.working_dir != "":
                     os.chdir(self.working_dir)
 
-                proc = subprocess.Popen(self.command,
-                    stdout=self.stdout, stderr=subprocess.STDOUT,
+                proc = subprocess.Popen(
+                    self.command,
+                    stdout=self.stdout,
+                    stderr=subprocess.STDOUT,
                     stdin=subprocess.PIPE,
-                    shell=shell, universal_newlines=True)
+                    shell=shell,
+                    universal_newlines=True
+                )
                 output = proc.communicate(self.stdin)[0]
                 if not output:
                     output = ''
                 # if sublime's python gets bumped to 2.7 we can just do:
                 # output = subprocess.check_output(self.command)
-                main_thread(self.on_done,
-                    _make_text_safeish(output, self.fallback_encoding), **self.kwargs)
+                main_thread(self.on_done, _make_text_safeish(output, self.fallback_encoding), **self.kwargs)
 
         except subprocess.CalledProcessError, e:
             main_thread(self.on_done, e.returncode)
@@ -140,8 +143,7 @@ class CommandThread(threading.Thread):
 class GitCommand(object):
     may_change_files = False
 
-    def run_command(self, command, callback=None, show_status=True,
-            filter_empty_args=True, no_save=False, **kwargs):
+    def run_command(self, command, callback=None, show_status=True, filter_empty_args=True, no_save=False, **kwargs):
         if filter_empty_args:
             command = [arg for arg in command if arg]
         if 'working_dir' not in kwargs:
@@ -186,8 +188,7 @@ class GitCommand(object):
             return
         self.panel(result)
 
-    def _output_to_view(self, output_file, output, clear=False,
-            syntax="Packages/Diff/Diff.tmLanguage", **kwargs):
+    def _output_to_view(self, output_file, output, clear=False, syntax="Packages/Diff/Diff.tmLanguage", **kwargs):
         output_file.set_syntax_file(syntax)
         edit = output_file.begin_edit()
         if clear:
@@ -307,8 +308,7 @@ class GitCustomCommand(GitWindowCommand):
     may_change_files = True
 
     def run(self):
-        self.get_window().show_input_panel("Git command", "",
-            self.on_input, None, None)
+        self.get_window().show_input_panel("Git command", "", self.on_input, None, None)
 
     def on_input(self, command):
         command = str(command)  # avoiding unicode
@@ -330,4 +330,9 @@ class GitGuiCommand(GitTextCommand):
 class GitGitkCommand(GitTextCommand):
     def run(self, edit):
         command = ['gitk']
+        self.run_command(command)
+
+class GitGitgCommand(GitTextCommand):
+    def run(self, edit):
+        command = ['gitg']
         self.run_command(command)

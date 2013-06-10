@@ -30,8 +30,11 @@ class GitAddChoiceCommand(status.GitStatusCommand):
                 command += ['rm']
             command += ['--', picked_file]
 
-        self.run_command(command, self.rerun,
-            working_dir=working_dir)
+        self.run_command(
+            command,
+            self.rerun,
+            working_dir=working_dir
+        )
 
     def rerun(self, result):
         self.run()
@@ -54,7 +57,7 @@ class GitAddSelectedHunkCommand(GitTextCommand):
                 "end": self.view.rowcol(sel.end())[0] + 1,
             })
 
-        hunks = [{"diff":""}]
+        hunks = [{"diff": ""}]
         i = 0
         matcher = re.compile('^@@ -([0-9]*)(?:,([0-9]*))? \+([0-9]*)(?:,([0-9]*))? @@')
         for line in result.splitlines():

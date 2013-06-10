@@ -203,8 +203,8 @@
         "command": "git_gui"
     }
     ,{
-        "caption": "Git: Gitk",
-        "command": "git_gitk"
+        "caption": "Git: Gitg",
+        "command": "git_gitg"
     }
     ,{
         "caption": "Git: Commit history",

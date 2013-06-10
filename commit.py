@@ -12,15 +12,13 @@ history = []
 
 class GitQuickCommitCommand(GitTextCommand):
     def run(self, edit):
-        self.get_window().show_input_panel("Message", "",
-            self.on_input, None, None)
+        self.get_window().show_input_panel("Message", "", self.on_input, None, None)
 
     def on_input(self, message):
         if message.strip() == "":
             self.panel("No commit message provided")
             return
-        self.run_command(['git', 'add', self.get_file_name()],
-            functools.partial(self.add_done, message))
+        self.run_command(['git', 'add', self.get_file_name()], functools.partial(self.add_done, message))
 
     def add_done(self, message, result):
         if result.strip():
@@ -58,7 +56,7 @@ class GitCommitCommand(GitWindowCommand):
         self.run_command(
             ['git', 'status', '--untracked-files=no', '--porcelain'],
             self.porcelain_status_done
-            )
+        )
 
     def porcelain_status_done(self, result):
         # todo: split out these status-parsing things... asdf
@@ -109,8 +107,7 @@ class GitCommitCommand(GitWindowCommand):
         # filter out the comments (git commit doesn't do this automatically)
         settings = sublime.load_settings("Git.sublime-settings")
         historySize = settings.get('history_size')
-        lines = [line for line in message.split("\n# --------------")[0].split("\n")
-            if not line.lstrip().startswith('#')]
+        lines = [line for line in message.split("\n# --------------")[0].split("\n") if not line.lstrip().startswith('#')]
         message = '\n'.join(lines).strip()
 
         if len(message) and historySize:
@@ -122,8 +119,7 @@ class GitCommitCommand(GitWindowCommand):
         self.message_file = message_file
         # and actually commit
         with open(message_file.name, 'r') as fp:
-            self.run_command(['git', 'commit', '-F', '-', self.extra_options],
-                self.commit_done, working_dir=self.working_dir, stdin=fp.read())
+            self.run_command(['git', 'commit', '-F', '-', self.extra_options], self.commit_done, working_dir=self.working_dir, stdin=fp.read())
 
     def commit_done(self, result, **kwargs):
         os.remove(self.message_file.name)

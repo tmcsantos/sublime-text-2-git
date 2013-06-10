@@ -26,15 +26,21 @@ class GitBlameCommand(GitTextCommand):
             command.extend(('-L', lines))
             callback = self.blame_done
         else:
-            callback = functools.partial(self.blame_done,
-                    position=self.view.viewport_position())
+            callback = functools.partial(
+                self.blame_done,
+                position=self.view.viewport_position()
+            )
 
         command.append(self.get_file_name())
         self.run_command(command, callback)
 
     def blame_done(self, result, position=None):
-        self.scratch(result, title="Git Blame", position=position,
-                syntax=plugin_file("syntax/Git Blame.tmLanguage"))
+        self.scratch(
+            result,
+            title="Git Blame",
+            position=position,
+            syntax=plugin_file("syntax/Git Blame.tmLanguage")
+        )
 
 
 class GitLog(object):
@@ -49,8 +55,7 @@ class GitLog(object):
         # 9000 is a pretty arbitrarily chosen limit; picked entirely because
         # it's about the size of the largest repo I've tested this on... and
         # there's a definite hiccup when it's loading that
-        command = ['git', 'log', '--pretty=%s\a%h %an <%aE>\a%ad (%ar)',
-            '--date=local', '--max-count=9000', '--follow' if follow else None]
+        command = ['git', 'log', '--pretty=%s\a%h %an <%aE>\a%ad (%ar)', '--date=local', '--max-count=9000', '--follow' if follow else None]
         command.extend(args)
         self.run_command(
             command,
@@ -91,9 +96,9 @@ class GitShow(object):
     def run(self, edit=None):
         # GitLog Copy-Past
         self.run_command(
-            ['git', 'log', '--pretty=%s\a%h %an <%aE>\a%ad (%ar)',
-            '--date=local', '--max-count=9000', '--', self.get_file_name()],
-            self.show_done)
+            ['git', 'log', '--pretty=%s\a%h %an <%aE>\a%ad (%ar)', '--date=local', '--max-count=9000', '--', self.get_file_name()],
+            self.show_done
+        )
 
     def show_done(self, result):
         # GitLog Copy-Past
@@ -150,8 +155,11 @@ class GitOpenFileCommand(GitLog, GitWindowCommand):
 
     def branch_done(self, result):
         self.results = result.rstrip().split('\n')
-        self.quick_panel(self.results, self.branch_panel_done,
-            sublime.MONOSPACE_FONT)
+        self.quick_panel(
+            self.results,
+            self.branch_panel_done,
+            sublime.MONOSPACE_FONT
+        )
 
     def branch_panel_done(self, picked):
         if 0 > picked < len(self.results):

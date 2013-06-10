@@ -1,5 +1,7 @@
 import sublime
+import sublime_plugin
 import re
+import os
 from git import git_root, GitTextCommand, GitWindowCommand
 import functools
 
@@ -44,8 +46,7 @@ class GitDiff (object):
 
 class GitDiffCommit (object):
     def run(self, edit=None):
-        self.run_command(['git', 'diff', '--cached', '--no-color'],
-            self.diff_done)
+        self.run_command(['git', 'diff', '--cached', '--no-color'], self.diff_done)
 
     def diff_done(self, result):
         if not result.strip():

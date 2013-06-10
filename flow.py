@@ -50,8 +50,7 @@ class GitFlowReleaseFinishCommand(GitFlowCommand):
 
     def release_done(self, result):
         self.results = result.rstrip().split('\n')
-        self.quick_panel(self.results, self.panel_done,
-            sublime.MONOSPACE_FONT)
+        self.quick_panel(self.results, self.panel_done, sublime.MONOSPACE_FONT)
 
     def panel_done(self, picked):
         if 0 > picked < len(self.results):
@@ -77,8 +76,7 @@ class GitFlowHotfixFinishCommand(GitFlowCommand):
 
     def hotfix_done(self, result):
         self.results = result.rstrip().split('\n')
-        self.quick_panel(self.results, self.panel_done,
-            sublime.MONOSPACE_FONT)
+        self.quick_panel(self.results, self.panel_done, sublime.MONOSPACE_FONT)
 
     def panel_done(self, picked):
         if 0 > picked < len(self.results):
